@@ -6,6 +6,9 @@ const bodyPareser = require("body-parser");
 const core = require("cors");
 const {default :axios} = require("axios")
 
+const{USERS} =require("./user")
+const{TODO} =require("./todos")
+
 
 
 
@@ -36,15 +39,19 @@ async function startServer(){
         `,
         resolvers:{
             Todo :{
-               user : async(todo) => (await axios.get(`https://jsonplaceholder.typicode.com/users/${todo.id}`)).data
+                // user : async(todo) => (await axios.get(`https://jsonplaceholder.typicode.com/users/${todo.id}`)).data
+                user : (todo) => USERS.find((e) => e.id === todo.id)
             },
             Query : {
                 // getTodos: () => [{id : 1 , title : "demo", completed : false}]
-                getTodos:async () =>(await  axios.get("https://jsonplaceholder.typicode.com/todos")).data,
+                // getTodos:async () =>(await  axios.get("https://jsonplaceholder.typicode.com/todos")).data,
                 // getTodos:async () => await  axios.get("https://jsonplaceholder.typicode.com/todos") error 
+                getTodos: () => TODO, 
                
-                getallUser : async () => (await axios.get("https://jsonplaceholder.typicode.com/users")).data,
-                getuser : async (parent , {id}) => (await axios.get(`https://jsonplaceholder.typicode.com/users/${id}`)).data
+                // getallUser : async () => (await axios.get("https://jsonplaceholder.typicode.com/users")).data,
+                getallUser :  () => USERS,
+                // getuser : async (parent , {id}) => (await axios.get(`https://jsonplaceholder.typicode.com/users/${id}`)).data
+                getuser : async (parent , {id}) => USERS.find((e) => e.id === id) //liner serach on id
 
             }
         }
