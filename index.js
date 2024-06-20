@@ -20,24 +20,32 @@ async function startServer(){
            email : String
            phone :String
         }
+
         type Todo {
         id : ID!
         title : String!
         completed :Boolean
+        user : User
         }
 
         type Query {
           getTodos : [Todo] 
           getallUser : [User] 
+          getuser(id :ID!) :User
         }
         `,
         resolvers:{
+            Todo :{
+               user : async(todo) => (await axios.get(`https://jsonplaceholder.typicode.com/users/${todo.id}`)).data
+            },
             Query : {
                 // getTodos: () => [{id : 1 , title : "demo", completed : false}]
                 getTodos:async () =>(await  axios.get("https://jsonplaceholder.typicode.com/todos")).data,
                 // getTodos:async () => await  axios.get("https://jsonplaceholder.typicode.com/todos") error 
                
-                getallUser : async () => (await axios.get("https://jsonplaceholder.typicode.com/users")).data
+                getallUser : async () => (await axios.get("https://jsonplaceholder.typicode.com/users")).data,
+                getuser : async (parent , {id}) => (await axios.get(`https://jsonplaceholder.typicode.com/users/${id}`)).data
+
             }
         }
         
