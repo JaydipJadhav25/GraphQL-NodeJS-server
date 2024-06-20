@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "@apollo/server": "^4.10.4",
+    "axios": "^1.7.2",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "graphql": "^16.8.2"
+  }
+}
